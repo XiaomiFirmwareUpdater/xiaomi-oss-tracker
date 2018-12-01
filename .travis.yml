@@ -1,0 +1,13 @@
+sudo: required
+language: python
+python:
+  - "3.6"
+
+script:
+  - pip install requests
+  - python xiaomi_oss.py
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
