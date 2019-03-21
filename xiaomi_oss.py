@@ -4,7 +4,7 @@ import re
 from os import remove, rename, path, system, environ
 import difflib
 from datetime import date
-GIT_OAUTH_TOKEN = environ['GIT_OAUTH_TOKEN']
+GIT_OAUTH_TOKEN = environ['XFU']
 
 if path.exists("devices"):
     rename("devices", "old")
@@ -51,3 +51,4 @@ for line in tmp:
     )
     url = "https://api.telegram.org/bot" + bottoken + "/sendMessage"
     req = post(url, params=params)
+
