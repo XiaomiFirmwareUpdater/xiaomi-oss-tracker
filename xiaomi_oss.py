@@ -37,7 +37,7 @@ system("git add devices && "" \
        ""git commit -m \"sync: {0} [skip ci]\" --author='XiaomiFirmwareUpdater <xiaomifirmwareupdater@gmail.com>' && "" \
        ""git push -q https://{1}@github.com/XiaomiFirmwareUpdater/xiaomi-oss-tracker.git HEAD:master".format(today,GIT_OAUTH_TOKEN))
 
-bottoken = environ['bottoken']
+bottoken = environ['tg_bot_token']
 chat = environ['tg_chat']
 tmp = open('changes', 'r').read().split('\n')[:-1]
 for line in tmp:
