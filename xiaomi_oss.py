@@ -6,12 +6,14 @@ import difflib
 from datetime import date
 GIT_OAUTH_TOKEN = environ['XFU']
 
+HEADER = {'Authorization': f'token {environ["XFU"]}'}
+
 if path.exists("devices"):
     rename("devices", "old")
 
 # get repos list
-url = "https://api.github.com/repos/MiCode/Xiaomi_Kernel_OpenSource/branches?page=1&per_page=100&access_token={0}".format(GIT_OAUTH_TOKEN)
-req = str(json.loads(get(url).text))
+url = "https://api.github.com/repos/MiCode/Xiaomi_Kernel_OpenSource/branches?page=1&per_page=100"
+req = str(json.loads(get(url).text), headers=HEADER)
 devices = re.findall(r"'[a-z]*-[a-z]*-oss'", req)
 with open("new", "w+") as o:
     for branch in devices:
@@ -35,7 +37,7 @@ remove("old")
 today = str(date.today())
 system("git add devices && "" \
        ""git commit -m \"sync: {0} [skip ci]\" --author='XiaomiFirmwareUpdater <xiaomifirmwareupdater@gmail.com>' && "" \
-       ""git push -q https://{1}@github.com/XiaomiFirmwareUpdater/xiaomi-oss-tracker.git HEAD:master".format(today,GIT_OAUTH_TOKEN))
+       ""git push -q https://{1}@github.com/XiaomiFirmwareUpdater/xiaomi-oss-tracker.git HEAD:master".format(today, GIT_OAUTH_TOKEN))
 
 bottoken = environ['tg_bot_token']
 chat = environ['tg_chat']
