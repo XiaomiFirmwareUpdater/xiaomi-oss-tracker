@@ -13,7 +13,7 @@ if path.exists("devices"):
 
 # get repos list
 url = "https://api.github.com/repos/MiCode/Xiaomi_Kernel_OpenSource/branches?page=1&per_page=100"
-req = str(json.loads(get(url).text), headers=HEADER)
+req = str(json.loads(get(url, headers=HEADER).text))
 devices = re.findall(r"'[a-z]*-[a-z]*-oss'", req)
 with open("new", "w+") as o:
     for branch in devices:
