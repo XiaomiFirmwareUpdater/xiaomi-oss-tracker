@@ -1,4 +1,4 @@
-from requests import get, post
+from requests import get, post, head
 import json
 import re
 from os import remove, rename, path, system, environ
@@ -8,13 +8,26 @@ GIT_OAUTH_TOKEN = environ['XFU']
 
 HEADER = {'Authorization': f'token {environ["XFU"]}'}
 
+def get_data_from_github(url):
+    data = []
+    last = head(url, headers=HEADER).links.get('last')
+    if last:
+        last = last.get('url').split('=')[-1]
+        for i in range(1, int(last) + 1):
+            for j in get(f"{url}&page={i}", headers=HEADER).json():
+                data.append(j)
+    else:
+        data = get(url, headers=HEADER).json()
+    return data
+
+
 if path.exists("devices"):
     rename("devices", "old")
 
 # get repos list
-url = "https://api.github.com/repos/MiCode/Xiaomi_Kernel_OpenSource/branches?page=1&per_page=100"
-req = str(json.loads(get(url, headers=HEADER).text))
-devices = re.findall(r"'[a-z]*-[a-z]*-oss'", req)
+url = "https://api.github.com/repos/MiCode/Xiaomi_Kernel_OpenSource/branches?per_page=100"
+req = get_data_from_github(url)
+devices = re.findall(r"'[a-z]*-[a-z]*-oss'", str(req))
 with open("new", "w+") as o:
     for branch in devices:
         device = str(branch).replace("'", '')
